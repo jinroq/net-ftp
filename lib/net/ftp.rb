@@ -235,6 +235,8 @@ module Net
         options[:account] = acct
       end
       @host = nil
+      @username = options[:username]
+      @password = options[:password]
       if options[:ssl]
         unless defined?(OpenSSL::SSL)
           raise "SSL extension not installed"
@@ -626,11 +628,9 @@ module Net
     # following the successful login.  Raises an exception on error
     # (typically <tt>Net::FTPPermError</tt>).
     #
-    def login(user = "anonymous", passwd = nil, acct = nil)
-      if user == "anonymous" and passwd == nil
-        passwd = "anonymous@"
-      end
-
+    def login(user = nil, passwd = nil, acct = nil)
+      user = @username.nil? ? 'anonymous' : @username if user.nil?
+      passwd = user == 'anonymous' ? 'anonymous@' : @password if passwd.nil?
       resp = ""
       synchronize do
         resp = sendcmd('USER ' + user)
