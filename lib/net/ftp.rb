@@ -629,7 +629,7 @@ module Net
     # (typically <tt>Net::FTPPermError</tt>).
     #
     def login(user = nil, passwd = nil, acct = nil)
-      user = @username.nil? ? 'anonymous' : @username if user.nil?
+      user = @username || 'anonymous' if user.nil?
       passwd = user == 'anonymous' ? 'anonymous@' : @password if passwd.nil?
       resp = ""
       synchronize do
